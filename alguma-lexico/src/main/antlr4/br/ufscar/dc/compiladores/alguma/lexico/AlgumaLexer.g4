@@ -5,13 +5,13 @@ PALAVRA_CHAVE:
     'leia' | 'escreva' | 'fim_algoritmo';
 
 IDENT:
-    ('a' .. 'z');
+    ('a' .. 'z') ('a'..'z')*;
 
 CADEIA:
-    '"' ~('"')* '"';
+    '"' ~('\n' | '"')* '"';
 
 COMENTARIO:
-    '{' ~('}')* '}' { skip(); } ;
+    '{' ~('\n' | '}' | '\r')* '}' { skip(); } ;
 
 WS:
     ( ' ' | '\t' | '\r' | '\n' ) { skip(); } ;
@@ -27,3 +27,15 @@ ABREPAR:
 
 FECHAPAR:
     ')';
+
+CADEIA_NAO_FECHADA:
+    '"' ~('"')* '\n';
+
+COMENTARIO_NAO_FECHADO:
+    '{' ~('}')* '\n';
+
+SIMBOLO_NAO_IDENTIFICADO:
+    '~' | '[' | ']' | '%' | '$' | '#' | '@' | '!' | '^' | '`';
+
+ERRO:
+    .;
