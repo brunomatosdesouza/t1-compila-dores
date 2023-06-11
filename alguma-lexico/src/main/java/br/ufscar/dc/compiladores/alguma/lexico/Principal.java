@@ -4,6 +4,7 @@ import java.io.IOException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.CommonTokenStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
@@ -21,30 +22,34 @@ public class Principal {
                 // Ler o arquivo com o path que está em args[0]
                 CharStream cs = CharStreams.fromFileName(args[0]);
                 AlgumaLexer lex = new AlgumaLexer(cs);
-                Token t = null;
                 
                 //Enquanto achar um token, escreverá no arquivo de saída
-                while ((t = lex.nextToken()).getType() != Token.EOF) {
+                // Token t = null;
+                // while ((t = lex.nextToken()).getType() != Token.EOF) {
                     
-                    if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) == "PALAVRA_CHAVE") {
-                        pw.println("<" + '\'' + t.getText() + '\''+ "," + '\'' + t.getText() + '\'' + ">");   
-                    } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()).equals("CADEIA_NAO_FECHADA")) {
-                        pw.println("Linha " + t.getLine() + ": cadeia literal nao fechada");
-                        break;
-                    } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()).equals("COMENTARIO_NAO_FECHADO")) {
-                        pw.println("Linha " + t.getLine() + ": comentario nao fechado");
-                        break;
-                    } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()).equals("SIMBOLO_NAO_IDENTIFICADO")) {
-                        pw.println("Linha " + t.getLine() + ": " + t.getText() + " - simbolo nao identificado");
-                        break;
-                    }else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) == "OP_REL") {
-                        pw.println("<" + '\'' + t.getText() + '\''+ "," + '\'' + t.getText() + '\'' + ">");
-                    } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) == "TIPOS") {
-                        pw.println("<" + '\'' + t.getText() + '\''+ "," + '\'' + t.getText() + '\'' + ">");
-                    } else {
-                        pw.println("<" + '\'' + t.getText() + '\''+ "," + AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) + ">");
-                    }
-                }
+                //     if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) == "PALAVRA_CHAVE") {
+                //         pw.println("<" + '\'' + t.getText() + '\''+ "," + '\'' + t.getText() + '\'' + ">");   
+                //     } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()).equals("CADEIA_NAO_FECHADA")) {
+                //         pw.println("Linha " + t.getLine() + ": cadeia literal nao fechada");
+                //         break;
+                //     } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()).equals("COMENTARIO_NAO_FECHADO")) {
+                //         pw.println("Linha " + t.getLine() + ": comentario nao fechado");
+                //         break;
+                //     } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()).equals("SIMBOLO_NAO_IDENTIFICADO")) {
+                //         pw.println("Linha " + t.getLine() + ": " + t.getText() + " - simbolo nao identificado");
+                //         break;
+                //     }else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) == "OP_REL") {
+                //         pw.println("<" + '\'' + t.getText() + '\''+ "," + '\'' + t.getText() + '\'' + ">");
+                //     } else if(AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) == "TIPOS") {
+                //         pw.println("<" + '\'' + t.getText() + '\''+ "," + '\'' + t.getText() + '\'' + ">");
+                //     } else {
+                //         pw.println("<" + '\'' + t.getText() + '\''+ "," + AlgumaLexer.VOCABULARY.getDisplayName(t.getType()) + ">");
+                //     }
+                // }
+
+                CommonTokenStream tokens = new CommonTokenStream(lex);
+                AlgumaParser parser = new AlgumaParser(tokens);
+                parser.programa();
             } catch (IOException error) {
                 error.printStackTrace();
             }
